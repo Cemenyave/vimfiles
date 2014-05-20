@@ -19,3 +19,6 @@
 [submodule "bundle/vim-gitgutter"]
 	path = bundle/vim-gitgutter
 	url = https://github.com/airblade/vim-gitgutter.git
+[submodule "utility/squirrel.vim"]
+	path = utility/squirrel.vim
+	url = https://github.com/ykanda/squirrel.vim.git
