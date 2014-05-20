@@ -1,6 +1,6 @@
 vimfiles
 ========
-   2
+
 INSTAL
 ======
 Just add this to ~/.vimrc
