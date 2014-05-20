@@ -75,3 +75,5 @@ let g:airline#extensions#tabline#enabled = 1
 "tagbar plugin
 nmap <F8> :TagbarToggle<CR>
 let g:tagbar_ctags_bin = '$VIMRUNTIME\bundle\utility\ctags.exe'
+
+au BufNewFile,BufRead *.nut setf squirrel
