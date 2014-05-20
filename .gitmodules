@@ -22,3 +22,6 @@
 [submodule "utility/squirrel.vim"]
 	path = utility/squirrel.vim
 	url = https://github.com/ykanda/squirrel.vim.git
+[submodule "bundle/unite.vim"]
+	path = bundle/unite.vim
+	url = https://github.com/Shougo/unite.vim.git
