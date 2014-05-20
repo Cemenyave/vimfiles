@@ -43,7 +43,8 @@ set shiftwidth=2
 set expandtab
 
 "set color scheme
-colorscheme molokai
+colorscheme skittles_berry
+let g:airline_theme="dark"
 set colorcolumn=80
 highlight ColorColumn ctermbg=darkgray
 syntax on
