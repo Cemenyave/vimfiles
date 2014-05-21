@@ -18,6 +18,12 @@ map <C-S-Tab> :tabprevious<CR>
 imap <C-Tab> <Esc>:tabnext<CR>
 imap <C-S-Tab> <Esc>:tabprevious<CR>
 
+"maximize on start
+if has("gui_running")
+  " GUI is running or is about to start.
+  " Maximize gvim window.
+  set lines=999 columns=999
+endif
 
 "set language
 set langmenu=none
@@ -82,6 +88,9 @@ let g:airline#extensions#tabline#enabled = 1
 
 "tagbar plugin
 nmap <F8> :TagbarToggle<CR>
-let g:tagbar_ctags_bin = '$VIMRUNTIME\bundle\utility\ctags.exe'
+let g:tagbar_ctags_bin = '$VIM\vimfiles\utility\ctags\ctags.exe'
+
+"the_silver_search path for ad.vim
+let g:agprg='\vimfiles\utility\the_silver_search\ag.exe --column'
 
 au BufNewFile,BufRead *.nut setf squirrel
