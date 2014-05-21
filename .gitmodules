@@ -28,3 +28,9 @@
 [submodule "utility/colors/skittles_berry"]
 	path = utility/colors/skittles_berry
 	url = https://github.com/shawncplus/skittles_berry.git
+[submodule "bundle/AfterColors.vim"]
+	path = bundle/AfterColors.vim
+	url = https://github.com/vim-scripts/AfterColors.vim.git
+[submodule "bundle/ack.vim"]
+	path = bundle/ack.vim
+	url = https://github.com/mileszs/ack.vim.git

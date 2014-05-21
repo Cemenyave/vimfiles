@@ -27,7 +27,7 @@ language mes en_GB
 execute pathogen#infect()
 syntax on
 filetype plugin indent on
-"execute pathogen#helptags()
+
 "change the mapleader form \ to , (comma)
 let mapleader = ","
 
@@ -36,11 +36,16 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 "tab settings
 set smartindent
-set smarttab
 set copyindent
+set smarttab
+set expandtab
 set tabstop=2
 set shiftwidth=2
-set expandtab
+set softtabstop=2
+
+"nonprint symbols displya
+set listchars=tab:▸\ ,eol:¬
+set list
 
 "set color scheme
 colorscheme skittles_berry
