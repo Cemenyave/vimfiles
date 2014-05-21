@@ -24,6 +24,7 @@ set langmenu=none
 set encoding=utf-8
 language mes en_GB
 
+"pathogen init
 execute pathogen#infect()
 syntax on
 filetype plugin indent on
@@ -68,6 +69,8 @@ set noswapfile
 "use system clipboard
 set clipboard=unnamed
 
+"set similar search format for windows findstr as for defaoult vimgrap
+set grepprg=findstr\ /n\ /s
 "Use ctrl-[hjkl] to select the active split!
 nmap <silent> <c-k> :wincmd k<CR>
 nmap <silent> <c-j> :wincmd j<CR>
