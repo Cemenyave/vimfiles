@@ -88,9 +88,10 @@ let g:airline#extensions#tabline#enabled = 1
 
 "tagbar plugin
 nmap <F8> :TagbarToggle<CR>
-let g:tagbar_ctags_bin = '$VIM\vimfiles\utility\ctags\ctags.exe'
+let g:tagbar_ctags_bin = '$HOME\vimfiles\utility\ctags\ctags.exe'
 
 "the_silver_search path for ad.vim
 let g:agprg='\vimfiles\utility\the_silver_search\ag.exe --column'
+let g:aghighlight=1
 
 au BufNewFile,BufRead *.nut setf squirrel
