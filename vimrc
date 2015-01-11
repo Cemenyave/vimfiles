@@ -30,6 +30,18 @@ set langmenu=none
 set encoding=utf-8
 language mes en_GB
 
+"vaundle configure
+set nocompatible
+filetype off
+
+set rtp+=$VIM\vimfiles\bundle\Vundle.vim
+echo $VIM 
+
+call vundle#begin('$VIM\vimfiles\custom_path')
+Plugin 'tpope/vim-fugitive'
+call vundle#end()
+filetype plugin indent on
+
 "pathogen init
 execute pathogen#infect()
 syntax on
