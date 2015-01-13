@@ -35,23 +35,23 @@ set nocompatible
 filetype off
 
 set rtp+=$VIM\vimfiles\bundle\Vundle.vim
-echo $VIM 
-
-call vundle#begin('$VIM\vimfiles\custom_path')
+call vundle#begin('$VIM\vimfiles\vundle_plugin')
+Plugin 'vim-scripts/L9'
 Plugin 'tpope/vim-fugitive'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'bling/vim-airline'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'vim-scripts/FuzzyFinder'
+Plugin 'rking/ag.vim'
 call vundle#end()
-filetype plugin indent on
-
-"pathogen init
-execute pathogen#infect()
-syntax on
 filetype plugin indent on
 
 "change the mapleader form \ to , (comma)
 let mapleader = ","
 
-nmap <silent> <leader>ev :e $MYVIMRC<CR>
-nmap <silent> <leader>sv :so $MYVIMRC<CR>
+nmap <silent> <leader>ev :e $VIM\vimfiles\vimrc<CR>
+nmap <silent> <leader>sv :so $VIM\vimfiles\vimrc<CR>
 
 "tab settings
 set smartindent
@@ -62,7 +62,7 @@ set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 
-"nonprint symbols displya
+"nonprint symbols display
 set listchars=tab:▸\ ,eol:¬
 set list
 
@@ -87,7 +87,7 @@ set noswapfile
 "use system clipboard
 set clipboard=unnamed
 
-"set similar search format for windows findstr as for defaoult vimgrap
+"set similar search format for windows findstr as for defaoult vimgrep
 set grepprg=findstr\ /n\ /s
 "Use ctrl-[hjkl] to select the active split!
 nmap <silent> <c-k> :wincmd k<CR>
@@ -100,10 +100,10 @@ let g:airline#extensions#tabline#enabled = 1
 
 "tagbar plugin
 nmap <F8> :TagbarToggle<CR>
-let g:tagbar_ctags_bin = '$HOME\vimfiles\utility\ctags\ctags.exe'
+let g:tagbar_ctags_bin = '$VIM\vimfiles\utility\ctags\ctags.exe'
 
-"the_silver_search path for ad.vim
-let g:agprg='\vimfiles\utility\the_silver_search\ag.exe --column'
+"the_silver_search path for ag.vim
+let g:ag_prg=$VIM . '\vimfiles\utility\the_silver_search\ag.exe --column'
 let g:aghighlight=1
 
 au BufNewFile,BufRead *.nut setf squirrel
