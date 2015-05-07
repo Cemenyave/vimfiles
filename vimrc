@@ -36,17 +36,27 @@ filetype off
 
 set rtp+=$HOME\vimfiles\bundle\Vundle.vim
 call vundle#begin('$HOME\vimfiles\vundle_plugin')
+"lib
 Plugin 'vim-scripts/L9'
+
+"Git
 Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'terryma/vim-expand-region'
-Plugin 'bling/vim-airline'
 Plugin 'airblade/vim-gitgutter'
+
+"navigation & search
+Plugin 'scrooloose/nerdtree'
 Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'rking/ag.vim'
-Plugin 'Shougo/vimproc.vim'
-Plugin 'Shougo/unite.vim'
+
+"text processing
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'terryma/vim-expand-region'
+
+"decoration
+Plugin 'bling/vim-airline'
+
+"Plugin 'Shougo/vimproc.vim'
+"Plugin 'Shougo/unite.vim'
 call vundle#end()
 filetype plugin indent on
 
