@@ -34,24 +34,35 @@ language mes en_GB
 set nocompatible
 filetype off
 
-set rtp+=$VIM\vimfiles\bundle\Vundle.vim
-call vundle#begin('$VIM\vimfiles\vundle_plugin')
+set rtp+=$HOME\vimfiles\bundle\Vundle.vim
+call vundle#begin('$HOME\vimfiles\vundle_plugin')
 Plugin 'vim-scripts/L9'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'terryma/vim-expand-region'
 Plugin 'bling/vim-airline'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'rking/ag.vim'
+Plugin 'Shougo/vimproc.vim'
+Plugin 'Shougo/unite.vim'
 call vundle#end()
 filetype plugin indent on
 
-"change the mapleader form \ to , (comma)
-let mapleader = ","
+"change the mapleader form \ to spacebar (comma)
+let mapleader = "\<Space>"
 
-nmap <silent> <leader>ev :e $VIM\vimfiles\vimrc<CR>
-nmap <silent> <leader>sv :so $VIM\vimfiles\vimrc<CR>
+nmap <silent> <leader>ev :e $HOME\vimfiles\vimrc<CR>
+nmap <silent> <leader>sv :so $HOME\vimfiles\vimrc<CR>
+
+"Copy & paste to system clipboard with <Space>p and <Space>y:
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
 
 "tab settings
 set smartindent
@@ -100,10 +111,50 @@ let g:airline#extensions#tabline#enabled = 1
 
 "tagbar plugin
 nmap <F8> :TagbarToggle<CR>
-let g:tagbar_ctags_bin = '$VIM\vimfiles\utility\ctags\ctags.exe'
+let g:tagbar_ctags_bin = '$HOME\vimfiles\utility\ctags\ctags.exe'
 
 "the_silver_search path for ag.vim
-let g:ag_prg=$VIM . '\vimfiles\utility\the_silver_search\ag.exe --column'
+let g:ag_prg=$HOME . '\vimfiles\utility\the_silver_search\ag.exe --column'
 let g:aghighlight=1
 
+"Regin uxapnding bindings for vim-expand-region
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
+
+"Unite configuration
+let g:unite_split_rule = 'botright'
+let g:unite_force_overwrite_statusline = 0
+let g:unite_winheight = 10
+let g:unite_candidate_icon='▷'
+
+" Using ag as recursive command.
+let g:unite_source_rec_async_command =
+    \ 'ag --follow --nocolor --nogroup --hidden -g ""'
+  " files
+nnoremap <silent><Leader>o :Unite -silent -start-insert file<CR>
+nnoremap <silent><Leader>O :Unite -silent -start-insert file_rec/async<CR>
+nnoremap <silent><Leader>m :Unite -silent file_mru<CR>
+  " buffers
+nnoremap <silent><Leader>b :Unite -silent buffer<CR>
+  " tabs
+nnoremap <silent><Leader>B :Unite -silent tab<CR>
+  " buffer search
+nnoremap <silent><Leader>f :Unite -silent -no-split -start-insert -auto-preview
+            \ line<CR>
+nnoremap <silent>[menu]8 :UniteWithCursorWord -silent -no-split -auto-preview
+            \ line<CR>
+  " yankring
+nnoremap <silent><Leader>i :Unite -silent history/yank<CR>
+  " grep
+nnoremap <silent><Leader>a :Unite -silent -no-quit grep<CR>
+  " help
+nnoremap <silent> g<C-h> :UniteWithCursorWord -silent help<CR>
+  " tasks
+nnoremap <silent><Leader>; :Unite -silent -toggle
+            \ Ag:%::FIXME\|TODO\|NOTE\|XXX\|COMBAK\|@todo<CR>
+  " outlines (also ctags)
+nnoremap <silent><Leader>t :Unite -silent -vertical -winwidth=40
+            \ -direction=topleft -toggle outline<CR>
+  " junk files
+  nnoremap <silent><Leader>d :Unite -silent junkfile/new junkfile<CR>
 au BufNewFile,BufRead *.nut setf squirrel
