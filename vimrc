@@ -11,12 +11,12 @@ ino <left> <Nop>
 ino <right> <Nop>
 
 "general mapping
-nmap <C-Tab> :tabnext<CR>
-nmap <C-S-Tab> :tabprevious<CR>
-map <C-Tab> :tabnext<CR>
-map <C-S-Tab> :tabprevious<CR>
-imap <C-Tab> <Esc>:tabnext<CR>
-imap <C-S-Tab> <Esc>:tabprevious<CR>
+nmap <C-Tab> :bn<CR>
+nmap <C-S-Tab> :bp<CR>
+map <C-Tab> :bn<CR>
+map <C-S-Tab> :bp<CR>
+imap <C-Tab> <Esc>:bn<CR>
+imap <C-S-Tab> <Esc>:bp<CR>
 
 "maximize on start
 if has("gui_running")
@@ -116,6 +116,9 @@ let g:tagbar_ctags_bin = '$HOME\vimfiles\utility\ctags\ctags.exe'
 "the_silver_search path for ag.vim
 let g:ag_prg=$HOME . '\vimfiles\utility\the_silver_search\ag.exe --column'
 let g:aghighlight=1
+
+"Ag shortcuts binding
+nmap <leader>f :Ag 
 
 "Regin uxapnding bindings for vim-expand-region
 vmap v <Plug>(expand_region_expand)
