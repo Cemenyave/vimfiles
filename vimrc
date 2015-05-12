@@ -54,6 +54,8 @@ Plugin 'terryma/vim-expand-region'
 
 "decoration
 Plugin 'bling/vim-airline'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'sjl/badwolf'
 
 "Plugin 'Shougo/vimproc.vim'
 "Plugin 'Shougo/unite.vim'
@@ -87,14 +89,24 @@ set softtabstop=2
 set listchars=tab:▸\ ,eol:¬
 set list
 
-"set color scheme
-colorscheme skittles_berry
+"Airline settings
 let g:airline_theme="dark"
-set colorcolumn=80
 highlight ColorColumn ctermbg=darkgray
-syntax on
-set guifont=Sauce_Code_Powerline:h11
-let g:airline_powerline_fonts = 1
+
+"set color scheme
+syntax enable
+if !has("gui_running")
+    set term=xterm
+    set t_Co=256
+    let &t_AB="\e[48;5;%dm"
+    let &t_AF="\e[38;5;%dm"
+endif
+let g:solarized_termcolors=256
+set background=dark
+colorscheme solarized
+
+
+set colorcolumn=80
 
 set showmatch
 set ignorecase
@@ -134,16 +146,18 @@ nmap <leader>f :Ag
 vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
 
-"Unite configuration
-let g:unite_split_rule = 'botright'
-let g:unite_force_overwrite_statusline = 0
-let g:unite_winheight = 10
-let g:unite_candidate_icon='▷'
-
-" Using ag as recursive command.
-let g:unite_source_rec_async_command =
-    \ 'ag --follow --nocolor --nogroup --hidden -g ""'
 "FuzzyFinder plugin bindings
 nmap <leader>t :FufCoverageFile<CR>
 
 au BufNewFile,BufRead *.nut setf squirrel
+
+"Disable beeping
+set noerrorbells visualbell t_vb=
+autocmd GUIEnter * set visualbell t_vb=
+set noeb vb t_vb=
+au GUIEnter * set vb t_vb=
+set noerrorbells visualbell t_vb=
+if has('autocmd')
+  autocmd GUIEnter * set visualbell t_vb=
+endif
+
