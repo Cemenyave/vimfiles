@@ -90,7 +90,7 @@ set listchars=tab:▸\ ,eol:¬
 set list
 
 "Airline settings
-let g:airline_theme="dark"
+let g:airline_theme="solarized"
 highlight ColorColumn ctermbg=darkgray
 
 "set color scheme
@@ -101,7 +101,8 @@ if !has("gui_running")
     let &t_AB="\e[48;5;%dm"
     let &t_AF="\e[38;5;%dm"
 endif
-let g:solarized_termcolors=256
+let g:solarized_underline=0
+let g:solarized_termcolors=16
 set background=dark
 colorscheme solarized
 
