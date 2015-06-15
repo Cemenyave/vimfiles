@@ -52,6 +52,10 @@ Plugin 'rking/ag.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'terryma/vim-expand-region'
 
+Plugin 'SirVer/ultisnips'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'scrooloose/syntastic'
+
 "decoration
 Plugin 'bling/vim-airline'
 Plugin 'altercation/vim-colors-solarized'
