@@ -45,7 +45,7 @@ Plugin 'airblade/vim-gitgutter'
 
 "navigation & search
 Plugin 'scrooloose/nerdtree'
-Plugin 'vim-scripts/FuzzyFinder'
+Plugin 'kien/ctrlp.vim'
 Plugin 'rking/ag.vim'
 
 "text processing
@@ -151,8 +151,8 @@ nmap <leader>f :Ag
 vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
 
-"FuzzyFinder plugin bindings
-nmap <leader>t :FufCoverageFile<CR>
+"CtrlP configuration
+nmap <leader>t :CtrlP<CR>
 
 au BufNewFile,BufRead *.nut setf squirrel
 
