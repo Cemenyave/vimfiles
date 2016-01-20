@@ -74,8 +74,8 @@ filetype plugin indent on
 "change the mapleader form \ to spacebar (comma)
 let mapleader = "\<Space>"
 
-nmap <silent> <leader>ev :e $HOME\vimfiles\vimrc<CR>
-nmap <silent> <leader>sv :so $HOME\vimfiles\vimrc<CR>
+nmap <silent> <leader>ev :e $HOME/vimfiles/vimrc<CR>
+nmap <silent> <leader>sv :so $HOME/vimfiles/vimrc<CR>
 
 "Copy & paste to system clipboard with <Space>p and <Space>y:
 vmap <Leader>y "+y
