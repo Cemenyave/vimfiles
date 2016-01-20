@@ -1,3 +1,9 @@
+if has('win32')
+  let s:vim_cache = expand('$HOME/vimfiles/')
+else
+  let s:vim_cache = expand('$HOME/.vim/')
+endif
+
 set nocompatible
 "unmap arrows
 no <up> <Nop>
@@ -34,8 +40,8 @@ language mes en_GB
 set nocompatible
 filetype off
 
-set rtp+=$HOME\vimfiles\bundle\Vundle.vim
-call vundle#begin('$HOME\vimfiles\vundle_plugin')
+let &rtp.=','.s:vim_cache . 'bundle/Vundle.vim'
+call vundle#begin(s:vim_cache . 'vundle_plugin')
 "lib
 Plugin 'vim-scripts/L9'
 
