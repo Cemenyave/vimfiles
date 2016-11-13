@@ -64,6 +64,7 @@ Plugin 'scrooloose/syntastic'
 
 "decoration
 Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'altercation/vim-colors-solarized'
 
 "Plugin 'Shougo/vimproc.vim'
