@@ -24,6 +24,9 @@ map <C-S-Tab> :bp<CR>
 imap <C-Tab> <Esc>:bn<CR>
 imap <C-S-Tab> <Esc>:bp<CR>
 
+inoremap <Char-0x07F> <BS>
+nnoremap <Char-0x07F> <BS>
+
 "maximize on start
 if has("gui_running")
   " GUI is running or is about to start.
@@ -53,6 +56,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'kien/ctrlp.vim'
 Plugin 'rking/ag.vim'
+Plugin 'tpope/vim-eunuch'
 
 "text processing
 Plugin 'scrooloose/nerdcommenter'
@@ -146,8 +150,7 @@ nmap <F8> :TagbarToggle<CR>
 let g:tagbar_ctags_bin = '$HOME\vimfiles\utility\ctags\ctags.exe'
 
 "the_silver_search path for ag.vim
-let g:ag_prg=$HOME . '\vimfiles\utility\the_silver_search\ag.exe --column'
-let g:aghighlight=1
+let g:ag_highlight=1
 
 "Ag shortcuts binding
 nmap <leader>f :Ag 
@@ -158,6 +161,7 @@ vmap <C-v> <Plug>(expand_region_shrink)
 
 "CtrlP configuration
 nmap <leader>t :CtrlP<CR>
+let g:ctrlp_custom_ignore = 'ag --nocolor -g "" %s'
 
 au BufNewFile,BufRead *.nut setf squirrel
 
