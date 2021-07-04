@@ -16,13 +16,15 @@ ino <down> <Nop>
 ino <left> <Nop>
 ino <right> <Nop>
 
-"general mapping
-nmap <C-Tab> :bn<CR>
-nmap <C-S-Tab> :bp<CR>
-map <C-Tab> :bn<CR>
-map <C-S-Tab> :bp<CR>
-imap <C-Tab> <Esc>:bn<CR>
-imap <C-S-Tab> <Esc>:bp<CR>
+"switch between tabs with Ctrl-Tab and Shift-Ctrl-Tab
+"Disabled because I'm not using this and it might confilict with coc.vim
+"configuration
+"nmap <C-Tab> :bn<CR>
+"nmap <C-S-Tab> :bp<CR>
+"map <C-Tab> :bn<CR>
+"map <C-S-Tab> :bp<CR>
+"imap <C-Tab> <Esc>:bn<CR>
+"imap <C-S-Tab> <Esc>:bp<CR>
 
 inoremap <Char-0x07F> <BS>
 nnoremap <Char-0x07F> <BS>
@@ -43,37 +45,40 @@ language mes en_GB
 set nocompatible
 filetype off
 
-let &rtp.=','.s:vim_cache . 'bundle/Vundle.vim'
-call vundle#begin(s:vim_cache . 'vundle_plugin')
-"lib
-Plugin 'vim-scripts/L9'
+"add vim-plug to runtime path
+let &rtp.=','.s:vim_cache . 'bundle/vim-plug'
+call plug#begin(s:vim_cache . 'vim-plug')
 
 "Git
-Plugin 'tpope/vim-fugitive'
-Plugin 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'nfvs/vim-perforce'
 
 "navigation & search
-Plugin 'scrooloose/nerdtree'
-Plugin 'kien/ctrlp.vim'
-Plugin 'rking/ag.vim'
-Plugin 'tpope/vim-eunuch'
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-eunuch'
+Plug 'junegunn/fzf', { 'do':{ -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 "text processing
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'terryma/vim-expand-region'
+Plug 'scrooloose/nerdcommenter'
+Plug 'terryma/vim-expand-region'
 
-Plugin 'SirVer/ultisnips'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'scrooloose/syntastic'
+"IDE
+Plug 'scrooloose/syntastic'
+Plug 'neoclide/coc.nvim'
+Plug 'embear/vim-localvimrc'
 
 "decoration
-Plugin 'bling/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'altercation/vim-colors-solarized'
+Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'altercation/vim-colors-solarized'
+Plug 'lifepillar/vim-solarized8'
+Plug 'vim-scripts/AfterColors.vim'
 
 "Plugin 'Shougo/vimproc.vim'
 "Plugin 'Shougo/unite.vim'
-call vundle#end()
+call plug#end()
 filetype plugin indent on
 
 "change the mapleader form \ to spacebar (comma)
@@ -109,7 +114,7 @@ highlight ColorColumn ctermbg=darkgray
 
 "set color scheme
 syntax enable
-if !has("gui_running")
+if !has("gui_running") && !has("nvim")
     set term=xterm
     set t_Co=256
     let &t_AB="\e[48;5;%dm"
@@ -117,7 +122,7 @@ if !has("gui_running")
 endif
 let g:solarized_termcolors=16
 set background=dark
-colorscheme solarized
+colorscheme solarized8
 
 
 set colorcolumn=80
@@ -145,23 +150,24 @@ nmap <silent> <c-l> :wincmd l<CR>
 set laststatus=2 "always show statusline
 let g:airline#extensions#tabline#enabled = 1
 
-"tagbar plugin
-nmap <F8> :TagbarToggle<CR>
-let g:tagbar_ctags_bin = '$HOME\vimfiles\utility\ctags\ctags.exe'
-
-"the_silver_search path for ag.vim
-let g:ag_highlight=1
-
-"Ag shortcuts binding
-nmap <leader>f :Ag 
+"Rg shortcuts binding
+nmap <leader>f :Rg 
 
 "Regin uxapnding bindings for vim-expand-region
 vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
 
-"CtrlP configuration
-nmap <leader>t :CtrlP<CR>
-let g:ctrlp_custom_ignore = 'ag --nocolor -g "" %s'
+"Fzf configuration
+nmap <leader>t :Files<CR>
+nmap <leader>tb :Buffers<CR>
+
+
+" Allow passing optional flags into the Rg command.
+"   Example: :Rg myterm -g '*.md'
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \ "rg --column --line-number --no-heading --color=always --smart-case " .
+  \ <q-args>, 1, fzf#vim#with_preview(), <bang>0)
 
 au BufNewFile,BufRead *.nut setf squirrel
 
@@ -175,3 +181,4 @@ if has('autocmd')
   autocmd GUIEnter * set visualbell t_vb=
 endif
 
+runtime .vimrc_coc

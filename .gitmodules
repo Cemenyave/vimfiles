@@ -1,6 +1,3 @@
-[submodule "utility/pathogen"]
-	path = utility/pathogen
-	url = https://github.com/tpope/vim-pathogen.git
 [submodule "bundle/vim-airline"]
 	path = bundle/vim-airline
 	url = https://github.com/bling/vim-airline.git
@@ -10,33 +7,15 @@
 [submodule "bundle/nerdtree"]
 	path = bundle/nerdtree
 	url = https://github.com/scrooloose/nerdtree.git
-[submodule "bundle/tagbar"]
-	path = bundle/tagbar
-	url = https://github.com/majutsushi/tagbar.git
 [submodule "bundle/vim-fugitive"]
 	path = bundle/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
 [submodule "bundle/vim-gitgutter"]
 	path = bundle/vim-gitgutter
 	url = https://github.com/airblade/vim-gitgutter.git
-[submodule "utility/squirrel.vim"]
-	path = utility/squirrel.vim
-	url = https://github.com/ykanda/squirrel.vim.git
-[submodule "bundle/unite.vim"]
-	path = bundle/unite.vim
-	url = https://github.com/Shougo/unite.vim.git
-[submodule "utility/colors/skittles_berry"]
-	path = utility/colors/skittles_berry
-	url = https://github.com/shawncplus/skittles_berry.git
-[submodule "bundle/AfterColors.vim"]
-	path = bundle/AfterColors.vim
-	url = https://github.com/vim-scripts/AfterColors.vim.git
-[submodule "bundle/ack.vim"]
-	path = bundle/ack.vim
-	url = https://github.com/mileszs/ack.vim.git
-[submodule "bundle/ag.vim"]
-	path = bundle/ag.vim
-	url = https://github.com/rking/ag.vim.git
 [submodule "bundle/Vundle.vim"]
 	path = bundle/Vundle.vim
 	url = https://github.com/gmarik/Vundle.vim.git
+[submodule "bundle\\vim-plug"]
+	path = bundle\\vim-plug
+	url = https://github.com/junegunn/vim-plug
