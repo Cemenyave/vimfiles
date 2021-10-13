@@ -49,6 +49,12 @@ filetype off
 let &rtp.=','.s:vim_cache . 'bundle/vim-plug'
 call plug#begin(s:vim_cache . 'vim-plug')
 
+"Utils
+Plug 'nvim-lua/plenary.nvim'
+
+"lua
+Plug 'rafcamlet/nvim-luapad'
+
 "Git
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -57,23 +63,27 @@ Plug 'nfvs/vim-perforce'
 "navigation & search
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-eunuch'
-Plug 'junegunn/fzf', { 'do':{ -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
+Plug 'vijaymarupudi/nvim-fzf'
+Plug 'vijaymarupudi/nvim-fzf-commands'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'duane9/nvim-rg'
 
 "text processing
 Plug 'scrooloose/nerdcommenter'
 Plug 'terryma/vim-expand-region'
 
 "IDE
-Plug 'scrooloose/syntastic'
-Plug 'neoclide/coc.nvim'
+"Plug 'scrooloose/syntastic'
+"Plug 'neoclide/coc.nvim'
 Plug 'embear/vim-localvimrc'
+"Plug 'jackguo380/vim-lsp-cxx-highlight'
 
 "decoration
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'altercation/vim-colors-solarized'
 Plug 'lifepillar/vim-solarized8'
+Plug 'tanvirtin/monokai.nvim'
 Plug 'vim-scripts/AfterColors.vim'
 
 "Plugin 'Shougo/vimproc.vim'
@@ -109,8 +119,29 @@ set listchars=tab:▸\ ,eol:¬
 set list
 
 "Airline settings
-let g:airline_theme="solarized"
+let g:airline_theme="dark"
 highlight ColorColumn ctermbg=darkgray
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+let g:airline_left_alt_sep = ''
+let g:airline_left_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_symbols.colnr = ' :'
+let g:airline_symbols.crypt = ''
+let g:airline_symbols.linenr = ' :'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.spell = 'spll'
+let g:airline_symbols.notexists = '∄'
+let g:airline_symbols.whitespace = 'Ξ'
+let g:airline_symbols.dirty = '⋆'
+let g:airline_symbols.readonly = ''
+"end airline
 
 "set color scheme
 syntax enable
@@ -122,7 +153,8 @@ if !has("gui_running") && !has("nvim")
 endif
 let g:solarized_termcolors=16
 set background=dark
-colorscheme solarized8
+"colorscheme solarized8
+colorscheme monokai
 
 
 set colorcolumn=80
@@ -158,8 +190,8 @@ vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
 
 "Fzf configuration
-nmap <leader>t :Files<CR>
-nmap <leader>tb :Buffers<CR>
+nmap <leader>t <cmd>lua require("fzf-commands").files()<CR>
+nmap <leader>tb <cmd>lua require("fzf-commands").bufferpicker()<CR>
 
 
 " Allow passing optional flags into the Rg command.
@@ -181,4 +213,4 @@ if has('autocmd')
   autocmd GUIEnter * set visualbell t_vb=
 endif
 
-runtime .vimrc_coc
+"runtime .vimrc_coc
