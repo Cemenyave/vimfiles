@@ -1,7 +1,11 @@
-if has('win32')
-  let s:vim_cache = expand('$HOME/vimfiles/')
+if !exists("g:cfg_vim_chache")
+  if has('win32')
+    let s:vim_cache = expand('$HOME/vimfiles/')
+  else
+    let s:vim_cache = expand('$HOME/.vim/')
+  endif
 else
-  let s:vim_cache = expand('$HOME/.vim/')
+  let s:vim_cache = g:cfg_vim_chache
 endif
 
 set nocompatible
@@ -69,7 +73,7 @@ call plug#begin(s:vim_cache . 'vim-plug')
 
 "Utils
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 
 "lua
 Plug 'rafcamlet/nvim-luapad'
@@ -103,6 +107,10 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'folke/trouble.nvim'
+Plug 'RishabhRD/popfix'
+Plug 'RishabhRD/nvim-lsputils'
 
 "decoration
 "Plug 'bling/vim-airline'
@@ -146,31 +154,6 @@ set softtabstop=2
 set listchars=tab:▸\ ,eol:↩
 set list
 
-"Airline settings
-"let g:airline_theme="dark"
-"highlight ColorColumn ctermbg=darkgray
-
-"if !exists('g:airline_symbols')
-  "let g:airline_symbols = {}
-"endif
-
-"let g:airline_left_alt_sep = ''
-"let g:airline_left_sep = ''
-"let g:airline_right_alt_sep = ''
-"let g:airline_right_sep = ''
-"let g:airline_symbols.colnr = ' :'
-"let g:airline_symbols.crypt = ''
-"let g:airline_symbols.linenr = ' :'
-"let g:airline_symbols.maxlinenr = ''
-"let g:airline_symbols.branch = ''
-"let g:airline_symbols.paste = 'ρ'
-"let g:airline_symbols.spell = 'spll'
-"let g:airline_symbols.notexists = '∄'
-"let g:airline_symbols.whitespace = 'Ξ'
-"let g:airline_symbols.dirty = '⋆'
-"let g:airline_symbols.readonly = ''
-""end airline
-
 "set color scheme
 syntax enable
 if !has("gui_running") && !has("nvim")
@@ -201,11 +184,12 @@ set clipboard=unnamed
 
 "set similar search format for windows findstr as for defaoult vimgrep
 set grepprg=findstr\ /n\ /s
+
 "Use ctrl-[hjkl] to select the active split!
-nmap <silent> <c-k> :wincmd k<CR>
-nmap <silent> <c-j> :wincmd j<CR>
-nmap <silent> <c-h> :wincmd h<CR>
-nmap <silent> <c-l> :wincmd l<CR>
+nmap <silent> <C-k> :wincmd k<CR>
+nmap <silent> <C-j> :wincmd j<CR>
+nmap <silent> <C-h> :wincmd h<CR>
+nmap <silent> <C-l> :wincmd l<CR>
 
 set laststatus=2 "always show statusline
 let g:airline#extensions#tabline#enabled = 1
@@ -267,27 +251,49 @@ require'lualine'.setup({
   },
 })
 
---[[
-require('lspconfig').clangd.setup({
-  on_attach=require'completion'.on_attach,
-  cmd = { "clangd-13", "--background-index" }
-})
---]]
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = { "c", "cpp", "c_sharp", "python", "cmake", "lua" },
 
-local lsp_status = require('lps_status')
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  -- List of parsers to ignore installing (for "all")
+  ignore_install = { },
+
+  highlight = {
+    -- `false` will disable the whole extension
+    enable = true,
+
+    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
+    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
+    -- the name of the parser)
+    -- list of language that will be disabled
+    disable = { },
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+}
+
+local lsp_status = require('lsp-status')
+lsp_status.register_progress()
 
 require"fidget".setup{}
-
 local cmp = require'cmp'
+local cmp_types = require('cmp.types')
 cmp.setup({
   snippet = {
     expand = function(args)
       require('luasnip').lsp_expand(args.body)
     end
   },
-  mappind = {
-    ['<C-j>'] = cmp.mapping.select_next_item,
-    ['<C-k>'] = cmp.mapping.select_prev_item,
+  mapping = cmp.mapping.preset.insert({
+    ['<C-j>'] = { i = cmp.mapping.select_next_item({behavior = cmp_types.cmp.SelectBehavior.Select }) },
+    ['<C-k>'] = { i = cmp.mapping.select_prev_item({behavior = cmp_types.cmp.SelectBehavior.Select }) },
     ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
     ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
     ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
@@ -297,7 +303,7 @@ cmp.setup({
       c = cmp.mapping.close(),
     }),
     ['<CR>'] = cmp.mapping.confirm({ serlect = true }),
-  },
+  }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'luasnip' }
@@ -309,10 +315,21 @@ local lsp_installer = require("nvim-lsp-installer")
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap=true, silent=true }
-vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>w', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
 vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
 vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+
+-- lsputil handler setup
+vim.lsp.handlers['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler
+vim.lsp.handlers['textDocument/references'] = require'lsputil.locations'.references_handler
+vim.lsp.handlers['textDocument/definition'] = require'lsputil.locations'.definition_handler
+vim.lsp.handlers['textDocument/declaration'] = require'lsputil.locations'.declaration_handler
+vim.lsp.handlers['textDocument/typeDefinition'] = require'lsputil.locations'.typeDefinition_handler
+vim.lsp.handlers['textDocument/implementation'] = require'lsputil.locations'.implementation_handler
+vim.lsp.handlers['textDocument/documentSymbol'] = require'lsputil.symbols'.document_handler
+vim.lsp.handlers['workspace/symbol'] = require'lsputil.symbols'.workspace_handle
+
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -326,7 +343,7 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
@@ -335,6 +352,7 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>g', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+  vim.api.nvim_set_keymap('n', 'gh', '<cmd>ClangdSwitchSourceHeader<CR>', opts)
 end
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -352,8 +370,18 @@ lsp_installer.on_server_ready(function(server)
     }
 
     if server.name == "omnisharp" then
-      local pid = vim.fn.getpid()
+      -- local pid = vim.fn.getpid()
       -- opts.cmd = { "omnisharp", "--languageserver" , "--hostPID", tostring(pid) }
+    end
+
+    if server.name == "clangd" then
+      opts.cmd = { "clangd",
+        "-log=verbose", 
+        "--background-index",
+        "--pch-storage=memory",
+        "--completion-style=bundled",
+        "--clang-tidy"
+        }
     end
 
     server:setup(opts)
@@ -368,6 +396,9 @@ lsp_installer.settings({
     }
   }
 })
+
+require('trouble').setup{
+}
 
 
 require('telescope').setup({
@@ -391,5 +422,3 @@ require('telescope').setup({
     }
 })
 EOF
-
-"runtime .vimrc_coc
