@@ -78,6 +78,9 @@ Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 "lua
 Plug 'rafcamlet/nvim-luapad'
 
+"OpenGL
+Plug 'tikhomirov/vim-glsl'
+
 "Git
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -111,6 +114,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'folke/trouble.nvim'
 Plug 'RishabhRD/popfix'
 Plug 'RishabhRD/nvim-lsputils'
+Plug 'ThePrimeagen/harpoon'
 
 "decoration
 "Plug 'bling/vim-airline'
@@ -195,26 +199,12 @@ set laststatus=2 "always show statusline
 let g:airline#extensions#tabline#enabled = 1
 
 "Rg shortcuts binding
-nmap <leader>f :Rg 
+nmap <leader>F :Rg 
 let rg_run_async = 0 "Unitl will fix asunc calls
 
 "Regin uxapnding bindings for vim-expand-region
 vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
-
-"Fzf configuration
-nmap <leader>t <cmd>lua require("fzf-commands").files()<CR>
-nmap <leader>tb <cmd>lua require("fzf-commands").bufferpicker()<CR>
-
-nmap <leader>T <cmd>lua require("telescope.builtin").find_files()<CR>
-
-
-" Allow passing optional flags into the Rg command.
-"   Example: :Rg myterm -g '*.md'
-"command! -bang -nargs=* Rg
-  "\ call fzf#vim#grep(
-  "\ "rg --column --line-number --no-heading --color=always --smart-case " .
-  "\ <q-args>, 1, fzf#vim#with_preview(), <bang>0)
 
 au BufNewFile,BufRead *.nut setf squirrel
 
@@ -240,6 +230,16 @@ set completeopt=menu,menuone,noselect
 
 lua << EOF
 
+-- Fzf configuration
+
+vim.keymap.set("n", "<leader>t",  function() require("telescope.builtin").find_files() end )
+vim.keymap.set("n", "<leader>f",  function() require("telescope.builtin").live_grep() end )
+vim.keymap.set("n", "<leader>Fc",  function() require("telescope.builtin").live_grep(
+  {
+    glob_pattern = "*.{c,cpp,h}"
+  }
+) end )
+
 require'lualine'.setup({
   sections = {
     lualine_a = {'mode'},
@@ -253,7 +253,7 @@ require'lualine'.setup({
 
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "c", "cpp", "c_sharp", "python", "cmake", "lua" },
+  ensure_installed = { "c", "cpp", "c_sharp", "python", "cmake", "lua", "vim" },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
@@ -310,7 +310,15 @@ cmp.setup({
   })
 })
 
-local lsp_installer = require("nvim-lsp-installer")
+-- Harpoon keybindings
+vim.keymap.set("n", "<leader>y",  function() require("harpoon.ui").toggle_quick_menu() end, {noremap=true, silent=true} )
+vim.keymap.set("n", "<leader>hh", function() require("harpoon.mark").add_file() end,        {noremap=true, silent=true} )
+
+require("harpoon").setup({
+    menu = {
+        width = vim.api.nvim_win_get_width(0) - 4,
+    }
+})
 
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -355,8 +363,10 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_set_keymap('n', 'gh', '<cmd>ClangdSwitchSourceHeader<CR>', opts)
 end
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
+
+local lsp_installer = require("nvim-lsp-installer")
 -- Register a handler that will be called for each installed server when it's ready (i.e. when installation is finished
 -- or if the server is already installed).
 lsp_installer.on_server_ready(function(server)
@@ -401,9 +411,16 @@ require('trouble').setup{
 }
 
 
-require('telescope').setup({
+local telescope = require('telescope')
+telescope.setup({
   defaults = {
+    mappings = {
+      i = {
+        ["<C-j>"] = "move_selection_next",
+        ["<C-k>"] = "move_selection_previous",
+      },
     },
+  },
   pickers = {
     -- Default configuration for builtin pickers goes here:
     -- picker_name = {
@@ -412,13 +429,14 @@ require('telescope').setup({
     -- }
     -- Now the picker_config_key will be applied every time you call this
     -- builtin picker
-    },
+  },
   extensions = {
     -- Your extension configuration goes here:
     -- extension_name = {
     --   extension_config_key = value,
     -- }
     -- please take a look at the readme of the extension you want to configure
-    }
+  }
 })
+
 EOF
