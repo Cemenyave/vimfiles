@@ -2,7 +2,18 @@ local tree_sitter = require('nvim-treesitter/configs')
 
 tree_sitter.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "c", "cpp", "c_sharp", "python", "cmake", "lua", "vim" },
+  ensure_installed = {
+    "c",
+    "cpp",
+    "c_sharp",
+    "python",
+    "cmake",
+    "lua",
+    "vim",
+    "vimdoc",
+    "luadoc",
+    "markdown",
+  },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,

@@ -2,11 +2,13 @@ local lspc = require('lspconfig')
 
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-local opts = { noremap = true, silent = true }
-vim.keymap.set('n', '<leader>w', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-vim.keymap.set('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+do
+  local opts = { noremap = true, silent = true }
+  vim.keymap.set('n', '<leader>w', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  vim.keymap.set('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+end
 
 -- lsputil handler setup
 vim.lsp.handlers['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler
@@ -52,7 +54,7 @@ lspc['clangd'].setup({
   capabilities = capabilities,
   cmd = {
     "clangd",
-    "-log=verbose", 
+    "-log=verbose",
     "--background-index",
     "--pch-storage=memory",
     "--completion-style=bundled",
@@ -62,26 +64,67 @@ lspc['clangd'].setup({
 
 lspc['lua_ls'].setup({
   on_attach = on_attach,
+  on_init = function(client)
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        -- Tell the language server which version of Lua you're using
+        -- (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT'
+      },
+      -- Make the server aware of Neovim runtime files
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME,
+          "${3rd}/defold/library",
+          -- Depending on the usage, you might want to add additional paths here.
+          -- "${3rd}/luv/library"
+          -- "${3rd}/busted/library",
+        }
+        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+        -- library = vim.api.nvim_get_runtime_file("", true)
+      }
+    })
+  end,
   capabilities = capabilities,
   settings = {
     Lua = {
-      diagnositics = { globals = {'vim'} }
+      path = {
+        '?.script'
+      }
     },
   },
 })
 
+
+ --[[require'lspconfig'.lua_ls.setup {]]
+   --[[on_init = function(client)]]
+     --[[local path = client.workspace_folders[1].name]]
+     --[[if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then]]
+       --[[return]]
+     --[[end]]
+ 
+     
+   --[[end,]]
+   --[[settings = {]]
+     --[[Lua = {}]]
+   --[[}]]
+ --[[}]]
+
 lspc['glslls'].setup({})
 
-function on_server_ready(f) end
-on_server_ready(function(server)
-    local opts = {
-      on_attach = on_attach,
-      capabilities = capabilities,
-      flags = {
-        -- This will be the default in neovim 0.7+
-        debounce_text_changes = 150,
-      }
-    }
+lspc['cmake'].setup({})
 
-    server:setup(opts)
-end)
+--[[function on_server_ready(f) end]]
+--[[on_server_ready(function(server)]]
+    --[[local opts = {]]
+      --[[on_attach = on_attach,]]
+      --[[capabilities = capabilities,]]
+      --[[flags = {]]
+        --[[-- This will be the default in neovim 0.7+]]
+        --[[debounce_text_changes = 150,]]
+      --[[}]]
+    --[[}]]
+
+    --[[server:setup(opts)]]
+--[[end)]]

@@ -16,7 +16,7 @@ vim.opt.runtimepath:append(','..vim.g.vim_cache..'bundle/vim-plug')
 
 
 vim.opt.spell = true
-vim.opt.spelllang = { 'en' , 'ru' }
+vim.opt.spelllang = { 'en' }
 
 -- Map leader to spacebar and unmap movement from spacebar
 vim.g.mapleader = ' '
@@ -60,8 +60,8 @@ vim.keymap.set('n', '<leader>m', function() vim.cmd[[echo 123]] end)
 vim.opt.filetype.plugin = true;
 --indent on
 
-vim.keymap.set({'n'}, '<leader>ev', ':e $home/vimfiles/init.lua<cr>', {silent})
-vim.keymap.set({'n'}, '<leader>sv', ':so $home/vimfiles/init.lua<cr>', {silent})
+vim.keymap.set({'n'}, '<leader>ev', ':e $HOME/vimfiles/init.lua<cr>', {silent})
+vim.keymap.set({'n'}, '<leader>sv', ':so $HOME/vimfiles/init.lua<cr>', {silent})
 
 -- copy & paste to system clipboard with <space>p and <space>y:
 vim.keymap.set({'v'}, '<leader>y', [["+y]])
@@ -96,7 +96,7 @@ vim.opt.backup = false
 vim.opt.swapfile = false
 
 -- use system clipboard
-vim.opt.clipboard = unnamed
+vim.opt.clipboard = "unnamed,unnamedplus"
 
 -- set similar search format for windows findstr as for defaoult vimgrep
 vim.opt.grepprg= [[ findstr /n\ /s ]]
